@@ -32,15 +32,58 @@ class UsersController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Users::find(),
-        ]);
+//        $dataProvider = new ActiveDataProvider([
+//            'query' => Users::find(),
+//        ]);
+//
+//        return $this->render('index', [
+//            'dataProvider' => $dataProvider,
+//        ]);
+        if(! Yii::$app->session['id_user']){
+             $model = new Users();
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                Yii::$app->session['id_user'] = $model->id;
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
+        }
+        else{
+            $id = Yii::$app->session['id_user'];
+            return $this->render('view', [
+                'model' => $this->findModel($id),
         ]);
+        }
     }
-
+    
+    
+    public function actionSignin(){
+        if(! Yii::$app->session['id_user']){
+            if ($_POST) {
+               // $model->find
+                Yii::$app->session['id_user'] = $model->id;
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('signin', [
+                    'model' => $model,
+                ]);
+            }
+        }
+        else{
+            $id = Yii::$app->session['id_user'];
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }
+    }
+    public function actionLogout()
+    {
+         Yii::$app->session['id_user'] = null;
+         return $this->redirect('index.php');
+    }   
     /**
      * Displays a single Users model.
      * @param integer $id

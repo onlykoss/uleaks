@@ -32,10 +32,10 @@ class Users extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['login', 'password', 'date_reg', 'rate'], 'required'],
+            [['login', 'password', 'date_reg',], 'required'],
             [['date_reg', 'date_born'], 'safe'],
             [['rate'], 'integer'],
-            [['name', 'surname', 'login', 'password'], 'string', 'max' => 255]
+            [['name', 'surname', 'login', 'password'], 'string', 'max' => 255],
         ];
     }
 
@@ -53,6 +53,7 @@ class Users extends \yii\db\ActiveRecord
             'date_reg' => 'Date Reg',
             'date_born' => 'Date Born',
             'rate' => 'Rate',
+            'avatar' => 'Avatar'
         ];
     }
 }
